@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxus Bypasser</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            background-color: #1e1e2f;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border-color: #6200ea;
+        }
+        .result {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="animate__animated animate__fadeInDown">Fluxus Bypasser</h1>
+        <form id="bypassForm">
+            <div class="form-group">
+                <input type="url" id="urlInput" class="form-control" placeholder="Enter Fluxus Link" required>
+            </div>
+            <button type="submit" class="btn btn-primary animate__animated animate__pulse animate__infinite">Bypass</button>
+        </form>
+        <div class="result alert alert-success" role="alert">
+            <strong>Key:</strong> <span id="keyOutput"></span>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('bypassForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('urlInput').value;
+            const apiUrl = `https://bypass-beta.vercel.app/api/bypass?url=${encodeURIComponent(url)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.key) {
+                        document.getElementById('keyOutput').innerText = data.key;
+                        document.querySelector('.result').style.display = 'block';
+                        document.querySelector('.result').classList.add('animate__animated', 'animate__fadeIn');
+                    } else {
+                        alert('Failed to bypass.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred');
+                });
+        });
+    </script>
+</body>
+</html>
