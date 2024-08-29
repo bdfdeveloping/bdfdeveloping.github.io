@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluxus Bypasser</title>
+    <title>Multi-Bypasser</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
@@ -11,9 +11,12 @@
             background-color: #1e1e2f;
             color: #ffffff;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
         .container {
             margin-top: 50px;
+            position: relative;
+            z-index: 1;
         }
         .btn-primary {
             background-color: #6200ea;
@@ -21,13 +24,36 @@
         }
         .result {
             margin-top: 20px;
-            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(270deg, #ff6b6b, #f7b733, #f7b733, #ff6b6b);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            z-index: 0;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
 <body>
+    <div class="background"></div>
     <div class="container text-center">
-        <h1 class="animate__animated animate__fadeInDown">Fluxus Bypasser</h1>
+        <h1 class="animate__animated animate__fadeInDown">Multi-Bypasser</h1>
+        <p>This website is maintained and hosted by Ovni, everything you see is entirely coded by him, please make sure to give credits if you are gonna showcase this website.</p>
         <form id="bypassForm">
             <div class="form-group">
                 <input type="url" id="urlInput" class="form-control" placeholder="Enter Fluxus Link" required>
@@ -43,15 +69,19 @@
         document.getElementById('bypassForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const url = document.getElementById('urlInput').value;
-            const apiUrl = `https://bypass-beta.vercel.app/api/bypass?url=${encodeURIComponent(url)}`;
+            const apiUrl = `https://shouko-api.neyoshiiuem.workers.dev/bypass?link=${encodeURIComponent(url)}`;
+            const apiKey = 'rowansexygirllgbtcornhub18apikey';
 
-            fetch(apiUrl)
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.key) {
                         document.getElementById('keyOutput').innerText = data.key;
                         document.querySelector('.result').style.display = 'block';
-                        document.querySelector('.result').classList.add('animate__animated', 'animate__fadeIn');
                     } else {
                         alert('Failed to bypass.');
                     }
