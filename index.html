@@ -3,116 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Bypasser</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <title>Link Bypasser</title>
     <style>
         body {
-            background-color: #0f0f0f;
-            color: #ffffff;
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            overflow: hidden;
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
-            margin-top: 50px;
-            position: relative;
-            z-index: 1;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 400px;
         }
-        .btn-primary {
-            background-color: #6200ea;
-            border-color: #6200ea;
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 4px;
+            outline: none;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #1f78ff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
         }
         .result {
             margin-top: 20px;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in-out forwards;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            word-wrap: break-word;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        .result span {
+            flex-grow: 1;
         }
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(15,15,15,0) 0%, rgba(15,15,15,1) 75%);
-            animation: starry-night 60s ease infinite;
-            z-index: 0;
+        .copy-btn {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            background: #1f78ff;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        @keyframes starry-night {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-        .background::before {
-            content: "";
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 15%),
-                              radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 15%);
-            background-size: 50px 50px;
-            animation: twinkle 10s ease infinite;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+        .copy-btn:hover {
+            background: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="background"></div>
-    <div class="container text-center">
-        <h1 class="animate__animated animate__fadeInDown">Multi-Bypasser</h1>
-        <p>This website is maintained and hosted by Ovni, everything you see is entirely coded by him, please make sure to give credits if you are gonna showcase this website.</p>
-        <form id="bypassForm">
-            <div class="form-group">
-                <input type="url" id="urlInput" class="form-control" placeholder="Enter Fluxus Link" required>
-            </div>
-            <button type="submit" class="btn btn-primary animate__animated animate__pulse animate__infinite">Bypass</button>
-        </form>
-        <div class="result alert alert-success" role="alert">
-            <strong>Key:</strong> <span id="keyOutput"></span>
-        </div>
+    <div class="container">
+        <h2>Link Bypasser</h2>
+        <input type="text" id="linkInput" placeholder="Enter link here">
+        <button onclick="bypassLink()">Bypass Link</button>
+        <div id="result" class="result"></div>
     </div>
-
     <script>
-        document.getElementById('bypassForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const url = document.getElementById('urlInput').value;
-            const apiUrl = `https://shouko-api.neyoshiiuem.workers.dev/bypass?link=${encodeURIComponent(url)}`;
-            const apiKey = 'rowansexygirllgbtcornhub18apikey';
+        function bypassLink() {
+            var link = document.getElementById('linkInput').value;
+            var resultDiv = document.getElementById('result');
+            if (link) {
+                fetch(`https://et.goatbypassers.xyz/api/adlinks/bypass?url=${encodeURIComponent(link)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.bypassed) {
+                            resultDiv.innerHTML = '<span><strong>Result:</strong> ' + data.bypassed + '</span><button class="copy-btn" onclick="copyToClipboard(\'' + data.bypassed + '\')">Copy</button>';
+                        } else {
+                            resultDiv.innerHTML = '<strong>error:</strong> failed to bypass the link.';
+                        }
+                    })
+                    .catch(() => {
+                        resultDiv.innerHTML = '<strong>Error:</strong> unable to connect to the api.';
+                    });
+            } else {
+                resultDiv.innerHTML = '<strong>error:</strong> please enter a link.';
+            }
+        }
 
-            fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.key) {
-                    document.getElementById('keyOutput').innerText = data.key;
-                    document.querySelector('.result').style.display = 'block';
-                } else {
-                    alert('Failed to bypass.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(`An error occurred: ${error.message}`);
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('link copied to clipboard!');
+            }, () => {
+                alert('failed to copy');
             });
-        });
+        }
     </script>
 </body>
 </html>
