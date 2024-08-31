@@ -3,114 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Bypasser</title>
+    <title>Novoline Bypass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-color: #ffffff;
+            --primary-color: #3a86ff;
+            --secondary-color: #ff006e;
+            --success-color: #38b000;
+        }
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #141e30, #243b55);
-            color: #fff;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
         }
         .container {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            width: 400px;
-        }
-        input[type="text"] {
             width: 100%;
-            padding: 10px;
+            max-width: 400px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
             margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
             border: none;
-            border-radius: 4px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus {
             outline: none;
-            font-size: 16px;
+            background-color: rgba(255,255,255,0.1);
         }
-        button {
-            padding: 10px 20px;
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 0;
+            font-size: 12px;
+            color: var(--primary-color);
+        }
+        .bypass-btn {
+            width: 100%;
+            padding: 15px;
             border: none;
-            border-radius: 4px;
-            background: #1f78ff;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--text-color);
             font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
         }
-        button:hover {
-            background: #0056b3;
+        .bypass-btn:hover {
+            background-color: #2a75e6;
         }
         .result {
             margin-top: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 4px;
-            word-wrap: break-word;
-            text-align: left;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            font-size: 14px;
+            word-break: break-all;
+            display: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .redirect-btn, .copy-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .redirect-btn:hover, .copy-btn:hover {
+            background-color: #2a75e6;
+        }
+        .settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            transform: scale(0.7);
+            transition: all 0.3s ease;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+        }
+        .toggle {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 15px;
         }
-        .result span {
-            flex-grow: 1;
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
         }
-        .copy-btn {
-            margin-left: 10px;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            background: #1f78ff;
-            color: #fff;
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
             cursor: pointer;
-            transition: background 0.3s;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
         }
-        .copy-btn:hover {
-            background: #0056b3;
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Link Bypasser</h2>
-        <input type="text" id="linkInput" placeholder="Enter link here">
-        <button onclick="bypassLink()">Bypass Link</button>
-        <div id="result" class="result"></div>
+        <div class="card">
+            <div class="logo">Novoline Bypass</div>
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder=" ">
+                <label for="urlInput">Enter URL to bypass</label>
+            </div>
+            <button class="bypass-btn" id="bypassButton">Bypass</button>
+            <div class="result" id="result"></div>
+            <div class="button-group" id="buttonGroup">
+                <button class="copy-btn" id="copyButton" style="display:none;">Copy</button>
+                <button class="redirect-btn" id="redirectButton" style="display:none;">Redirect</button>
+            </div>
+        </div>
     </div>
-    <script>
-        function bypassLink() {
-            var link = document.getElementById('linkInput').value;
-            var resultDiv = document.getElementById('result');
-            if (link) {
-                fetch(`https://et.goatbypassers.xyz/api/adlinks/bypass?url=${encodeURIComponent(link)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.bypassed) {
-                            resultDiv.innerHTML = '<span><strong>Result:</strong> ' + data.bypassed + '</span><button class="copy-btn" onclick="copyToClipboard(\'' + data.bypassed + '\')">Copy</button>';
-                        } else {
-                            resultDiv.innerHTML = '<strong>error:</strong> failed to bypass the link.';
-                        }
-                    })
-                    .catch(() => {
-                        resultDiv.innerHTML = '<strong>Error:</strong> unable to connect to the api.';
-                    });
-            } else {
-                resultDiv.innerHTML = '<strong>error:</strong> please enter a link.';
+
+    <button class="settings-btn" id="settingsBtn">⚙️</button>
+
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <div class="toggle">
+                <span>Auto Redirect</span>
+                <label class="switch">
+                    <input type="checkbox" id="autoRedirectToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const b = document.getElementById('bypassButton');
+    const i = document.getElementById('urlInput');
+    const r = document.getElementById('result');
+    const s = document.getElementById('settingsBtn');
+    const m = document.getElementById('settingsModal');
+    const t = document.getElementById('autoRedirectToggle');
+    const c = document.getElementById('copyButton');
+    const d = document.getElementById('redirectButton');
+
+    let a = localStorage.getItem('autoRedirect') === 'true';
+    t.checked = a;
+
+    s.addEventListener('click', () => m.classList.add('active'));
+    m.addEventListener('click', e => e.target === m && m.classList.remove('active'));
+
+    t.addEventListener('change', function() {
+        a = this.checked;
+        localStorage.setItem('autoRedirect', a);
+    });
+
+    const bypass = async (u) => {
+        const apiKey = "ETHOS_NSQR8ZKW"; // Your API key
+        const url = `https://ep.goatbypassers.xyz/api/adlinks/bypass?url=${encodeURIComponent(u)}&apikey=${apiKey}`;
+        const res = await fetch(url);
+        const d = await res.json();
+        return d.bypassed;
+    };
+
+    b.addEventListener('click', async () => {
+        const u = i.value.trim();
+        if (u) {
+            b.textContent = 'Bypassing...';
+            b.disabled = true;
+            try {
+                const by = await bypass(u);
+                r.style.display = 'block';
+                r.textContent = by;
+                c.style.display = 'block';
+                try {
+                    new URL(by);
+                    d.style.display = 'block';
+                } catch (_) {
+                    d.style.display = 'none';
+                }
+                if (a && d.style.display === 'block') {
+                    try {
+                        new URL(by);
+                        window.location.href = by;
+                    } catch (_) {}
+                }
+            } catch (e) {
+                r.style.display = 'block';
+                r.textContent = `Error: ${e.message}`;
+            } finally {
+                b.textContent = 'Bypass';
+                b.disabled = false;
             }
         }
+    });
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('link copied to clipboard!');
-            }, () => {
-                alert('failed to copy');
-            });
-        }
-    </script>
+    c.addEventListener('click', () => {
+        const by = r.textContent.trim();
+        if (by) navigator.clipboard.writeText(by);
+    });
+
+    d.addEventListener('click', () => {
+        const by = r.textContent.trim();
+        if (by) window.location.href = by;
+    });
+</script>
+
 </body>
 </html>
